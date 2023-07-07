@@ -3,6 +3,8 @@
 Парсер основных данных героя с сайта [DOTABUFF](https://ru.dotabuff.com/heroes/)
 
 ## Список доступных полей
+- hero_name
+- hero_roles
 - popularity
 - win_rate
 - safe_lane
