@@ -1,3 +1,5 @@
+import copy
+
 from bs4 import BeautifulSoup as bs
 import requests
 import json
@@ -5,6 +7,8 @@ import json
 BASE_PAGE_URL = r"https://ru.dotabuff.com/heroes/"
 HEADER = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:97.0) Gecko/20100101 Firefox/97.0'}
 PROPERTY = {
+    "hero_name": lambda data: get_req_hero_name(data),
+    "hero_roles": lambda data: data.find("div", class_="header-content-title").h1.small.text.split(", "),
     "popularity": lambda data: data.find("div", "header-content-secondary").dl.dd.text,
     "win_rate": lambda data: data.find("div", "header-content-secondary").dl.find_next("dl").dd.span.text,
     "safe_lane": lambda data: get_data_for_lane(data, "safe_lane"),
@@ -20,6 +24,12 @@ LANES = {
     "off_lane": lambda data: data.find_all("tbody")[1].find_all("tr")[1],
     "mid_lane": lambda data: data.find_all("tbody")[1].find_all("tr")[2],
 }
+
+
+def get_req_hero_name(data: bs) -> str:
+    cdata = copy.copy(data.find("div", class_="header-content-title"))
+    cdata.h1.small.extract()
+    return cdata.h1.text
 
 
 def get_heroes(data: bs, best: bool) -> list:
@@ -96,13 +106,13 @@ def format_data(html: str, properties: list) -> dict:
 if __name__ == "__main__":
     DEBUG = True
     if DEBUG:
-        result = format_data("", ["popularity", "win_rate", "safe_lane",
+        result = format_data("", ["hero_name", "hero_roles", "popularity", "win_rate", "safe_lane",
                                   "off_lane", "mid_lane", "ability_build",
                                   "used_items", "best_versus", "worst_versus"])
     else:
         html = get_html(input())
-        result = format_data(html, ["popularity", "win_rate", "safe_lane",
+        result = format_data(html, ["hero_name", "hero_roles", "popularity", "win_rate", "safe_lane",
                                     "off_lane", "mid_lane", "ability_build",
                                     "used_items", "best_versus", "worst_versus"])
-    result = json.dumps(result)
+    result = json.dumps(result, indent=4, ensure_ascii=False)
     print(result)
