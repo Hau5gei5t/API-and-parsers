@@ -19,6 +19,13 @@
 
 ```json
 {
+  "hero_name": "Riki",
+  "hero_roles": [
+    "ближнего боя",
+    "Carry",
+    "Disabler",
+    "Escape"
+  ],
   "popularity": "60th",
   "win_rate": "52.47%",
   "safe_lane": {
