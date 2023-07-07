@@ -114,5 +114,5 @@ if __name__ == "__main__":
         result = format_data(html, ["hero_name", "hero_roles", "popularity", "win_rate", "safe_lane",
                                     "off_lane", "mid_lane", "ability_build",
                                     "used_items", "best_versus", "worst_versus"])
-    result = json.dumps(result, indent=4, ensure_ascii=False)
+    result = json.dumps(result, indent=2, ensure_ascii=False)
     print(result)
